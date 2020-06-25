@@ -27,7 +27,7 @@ class Routes {
       options = name
 
       if (!options.name) {
-        throw new Error(`Unnamed routes not supported`)
+        throw new Error('Unnamed routes not supported')
       }
 
       name = options.name
@@ -197,11 +197,13 @@ class Route {
       throw new Error(`Missing page to render for route "${pattern}"`)
     }
 
+    const pathToRegexpOptions = data && data.caseSensitive ? { sensitive: true } : {}
+
     this.name = name
     this.locale = locale
     this.pattern = name === 'homepage' ? '' : (pattern || `/${name}`)
     this.page = page.replace(/(^|\/)homepage/, '').replace(/^\/?/, '/')
-    this.regex = pathToRegexp(this.pattern, this.keys = [])
+    this.regex = pathToRegexp(this.pattern, this.keys = [], pathToRegexpOptions)
     this.keyNames = this.keys.map(key => key.name)
     this.toPath = pathToRegexp.compile(this.pattern)
     this.data = data || {}
